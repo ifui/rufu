@@ -1,0 +1,30 @@
+[package]
+name = "rufu_web"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[dependencies]
+axum = {version = "0.7.2", features = ["macros"]}
+tokio =  { version = "1", features = ["full"] }
+# 序列化
+serde = { version = "1.0.193", features = ["derive"] }
+serde_json = "1.0.108"
+# 字段验证
+validator = { version = "0.16.1", features = ["derive"] }
+# ORM rbatis deps
+rbs = { version = "4.5"}
+rbatis = { version = "4.5"}
+rbdc-mysql = { version = "4.5" }
+# 配置文件
+config = "0.13.4"
+# 日志
+log = "0.4.20"
+fast_log = "1.6.12"
+# 全局变量
+once_cell = "1.19.0"
+# 网络运行时组件
+tower = { version = "0.4.13" }
+# 公共模块
+rufu_common = {path = "../rufu_common"}
+rufu_auth = {path = "../rufu_auth"}

@@ -1,0 +1,10 @@
+[workspace]
+# 指定当前workspace使用的依赖解析器版 1 or 2
+resolver = "2"
+members = [
+    "rufu_common",
+    "rufu_auth",
+    "rufu_web"
+]
+default-members = ["rufu_web"]
+

@@ -1,0 +1,22 @@
+[package]
+name = "rufu_auth"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+axum = "0.7.2"
+# 序列化
+serde = "1.0.193"
+serde_json = "1.0.108"
+# UUID
+uuid = "1.6.1"
+# 字段验证
+validator = { version = "0.16.1", features = ["derive"] }
+# ORM
+rbs = { version = "4.5"}
+rbatis = { version = "4.5"}
+# 公共模块
+rufu_common = {path = "../rufu_common"}
+anyhow = "1.0.79"
