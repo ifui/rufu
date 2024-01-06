@@ -1,3 +1,4 @@
+use crate::errors::AppError;
 use anyhow::Context;
 use argon2::password_hash::SaltString;
 use argon2::{Argon2, PasswordHash};
@@ -17,14 +18,14 @@ pub async fn hash_password(password: String) -> anyhow::Result<String> {
 }
 
 /// 验证密码
-pub async fn verify_password(password: String, password_hash: String) -> anyhow::Result<()> {
-    tokio::task::spawn_blocking(move || -> anyhow::Result<()> {
+pub async fn verify_password(password: String, password_hash: String) -> Result<(), AppError> {
+    tokio::task::spawn_blocking(move || -> Result<(), AppError> {
         let hash = PasswordHash::new(&password_hash)
-            .map_err(|e| anyhow::anyhow!("invalid password hash: {}", e))?;
+            .map_err(|e| AppError::VALIDATE_FIELD_ERROR("密码读取失败".to_string()))?;
         let result = hash.verify_password(&[&Argon2::default()], password);
         match result {
             Ok(_) => Ok(()),
-            Err(_) => Err(anyhow::anyhow!("invalid password")),
+            Err(_) => Err(AppError::VALIDATE_FIELD_ERROR("密码不正确".to_string())),
         }
     })
     .await
