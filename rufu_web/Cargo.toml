@@ -25,6 +25,10 @@ fast_log = "1.6.12"
 once_cell = "1.19.0"
 # 网络运行时组件
 tower = { version = "0.4.13" }
+# JWT
+jsonwebtoken = "9.2.0"
+# 日期时间
+chrono = "0.4.31"
 # 公共模块
 rufu_common = {path = "../rufu_common"}
 rufu_auth = {path = "../rufu_auth"}

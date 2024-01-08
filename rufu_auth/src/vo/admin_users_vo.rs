@@ -10,3 +10,10 @@ pub struct AdminUsersVo {
     pub email: String,
     pub phone: String,
 }
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct AdminUserWithTokenVo {
+    pub token: String,
+    pub userinfo: AdminUsersVo,
+    pub expire: i64,
+}

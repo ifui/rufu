@@ -17,6 +17,9 @@ validator = { version = "0.16.1", features = ["derive"] }
 # ORM
 rbs = { version = "4.5"}
 rbatis = { version = "4.5"}
+# 错误处理
+anyhow = "1.0.79"
+# JWT
+jsonwebtoken = "9.2.0"
 # 公共模块
 rufu_common = {path = "../rufu_common"}
-anyhow = "1.0.79"

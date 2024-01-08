@@ -1,5 +1,6 @@
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
+use jsonwebtoken::errors::ErrorKind;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
@@ -16,6 +17,10 @@ pub enum AppError {
     VALIDATE_FIELD_ERROR(String),
     // JSON序列化错误
     JSON_SERIALIZE,
+    // JWT错误
+    JWT_ERROR(String),
+    // 无权限访问
+    UNAUTHORIZED,
 }
 
 impl AppError {
@@ -26,6 +31,8 @@ impl AppError {
             AppError::VALIDATE_ERROR(_, v) => (422, "参数校验错误".to_string(), Some(v.clone())),
             AppError::VALIDATE_FIELD_ERROR(e) => (422, e.to_string(), None),
             AppError::JSON_SERIALIZE => (405, "JSON序列化错误".to_string(), None),
+            AppError::JWT_ERROR(e) => (406, e.to_string(), None),
+            AppError::UNAUTHORIZED => (401, "对不起，您没有权限访问".to_string(), None),
         }
     }
 }
@@ -65,5 +72,15 @@ impl From<serde_json::Error> for AppError {
 impl From<(serde_json::Error,)> for AppError {
     fn from(_: (serde_json::Error,)) -> Self {
         AppError::JSON_SERIALIZE
+    }
+}
+
+impl From<jsonwebtoken::errors::Error> for AppError {
+    fn from(arg: jsonwebtoken::errors::Error) -> Self {
+        match arg.kind() {
+            ErrorKind::InvalidToken => AppError::JWT_ERROR(arg.to_string()),
+            ErrorKind::ExpiredSignature => AppError::JWT_ERROR("用户信息已过期".to_string()),
+            _ => AppError::JWT_ERROR(arg.to_string()),
+        }
     }
 }

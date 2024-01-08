@@ -10,4 +10,7 @@ pub struct AppConfig {
     pub port: u16,
     pub version: String,
     pub database_url: String,
+    // JWT
+    pub jwt_secret: String,
+    pub jwt_expire: i64,
 }

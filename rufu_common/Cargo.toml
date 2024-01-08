@@ -35,3 +35,5 @@ fast_log = "1.6.12"
 # 网络运行时组件
 tower = { version = "0.4.13", features = ["timeout"] }
 async-trait = "0.1.75"
+# JWT
+jsonwebtoken = "9.2.0"

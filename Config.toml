@@ -5,3 +5,5 @@ port=3180
 version="0.0.1"
 server_name="rufu"
 database_url=""
+jwt_secret="rufu_jwt_secret"
+jwt_expire=60
