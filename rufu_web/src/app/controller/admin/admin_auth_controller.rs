@@ -10,7 +10,7 @@ use rufu_common::bootstrap::application::APP_CONFIG;
 use rufu_common::json::RufuJson;
 use rufu_common::response::{AppResponse, AppResult};
 
-// 用户登录
+/// 用户登录
 #[axum::debug_handler]
 pub async fn admin_login(req: RufuJson<AdminSignRequest>) -> AppResult<AdminUserWithTokenVo> {
     let res = login_with_username(req.validate()?).await?;
@@ -39,7 +39,7 @@ pub async fn admin_login(req: RufuJson<AdminSignRequest>) -> AppResult<AdminUser
     Ok(AppResponse::result(response))
 }
 
-// 后台用户注册
+/// 后台用户注册
 #[axum::debug_handler]
 pub async fn admin_register(userinfo: RufuJson<AdminRegisterRequest>) -> AppResult<AdminUsersVo> {
     let res = add_admin_user(userinfo.validate()?).await?;
@@ -47,7 +47,7 @@ pub async fn admin_register(userinfo: RufuJson<AdminRegisterRequest>) -> AppResu
     Ok(AppResponse::result(res))
 }
 
-// 登录用户信息
+/// 登录用户信息
 #[axum::debug_handler]
 pub async fn admin_userinfo(Extension(admin_user): Extension<AdminUsers>) -> AppResult<AdminUsers> {
     Ok(AppResponse::result(admin_user))

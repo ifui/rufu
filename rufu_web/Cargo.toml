@@ -29,6 +29,7 @@ tower = { version = "0.4.13" }
 jsonwebtoken = "9.2.0"
 # 日期时间
 chrono = "0.4.31"
-# 公共模块
+# ---- 模块
 rufu_common = {path = "../rufu_common"}
 rufu_auth = {path = "../rufu_auth"}
+rufu_article = {path = "../rufu_article"}

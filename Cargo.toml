@@ -4,7 +4,8 @@ resolver = "2"
 members = [
     "rufu_common",
     "rufu_auth",
-    "rufu_web"
+    "rufu_web",
+    "rufu_article"
 ]
 default-members = ["rufu_web"]
 

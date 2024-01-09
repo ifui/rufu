@@ -15,8 +15,8 @@ impl<T: Serialize> AppResponse<T> {
         Json(Self { code, msg, data })
     }
 
-    pub fn ok(msg: String) -> Json<Self> {
-        Self::new(0, msg, None)
+    pub fn ok() -> Json<Self> {
+        Self::new(0, "ok".to_string(), None)
     }
 
     pub fn result(data: T) -> Json<Self> {

@@ -11,6 +11,7 @@ pub async fn login_with_username(req: AdminSignRequest) -> Result<AdminUsersVo, 
     let db = get_db()?;
 
     let admin_user_vec = AdminUsers::select_by_column(db, "username", &req.username).await?;
+
     let admin_user = admin_user_vec
         .first()
         .ok_or(AppError::VALIDATE_FIELD_ERROR("用户不存在".to_string()))?;

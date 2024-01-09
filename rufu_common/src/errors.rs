@@ -79,7 +79,7 @@ impl From<jsonwebtoken::errors::Error> for AppError {
     fn from(arg: jsonwebtoken::errors::Error) -> Self {
         match arg.kind() {
             ErrorKind::InvalidToken => AppError::JWT_ERROR(arg.to_string()),
-            ErrorKind::ExpiredSignature => AppError::JWT_ERROR("用户信息已过期".to_string()),
+            ErrorKind::ExpiredSignature => AppError::JWT_ERROR("登录信息已过期".to_string()),
             _ => AppError::JWT_ERROR(arg.to_string()),
         }
     }

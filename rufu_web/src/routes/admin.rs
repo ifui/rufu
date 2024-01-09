@@ -1,7 +1,10 @@
+use crate::app::controller::admin::admin_article_category_controller::{
+    article_category_add, article_category_delete, article_category_list, article_category_update,
+};
 use crate::app::controller::admin::admin_auth_controller::{
     admin_login, admin_register, admin_userinfo,
 };
-use axum::routing::{get, post};
+use axum::routing::{delete, get, post, put};
 use axum::Router;
 use rufu_auth::middleware::jwt_middleware;
 
@@ -13,6 +16,10 @@ pub fn routes() -> Router {
 pub fn auth_routes() -> Router {
     Router::new()
         .route("/userinfo", get(admin_userinfo))
+        .route("/article/category", post(article_category_add))
+        .route("/article/category", get(article_category_list))
+        .route("/article/category/:id", put(article_category_update))
+        .route("/article/category", delete(article_category_delete))
         .layer(axum::middleware::from_fn(jwt_middleware))
 }
 

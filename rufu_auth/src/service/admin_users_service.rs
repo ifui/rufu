@@ -1,6 +1,7 @@
 use crate::entity::admin_users_entity::AdminUsers;
 use crate::request::admin_auth_request::AdminRegisterRequest;
 use crate::vo::admin_users_vo::AdminUsersVo;
+use rbatis::rbdc::DateTime;
 use rufu_common::bootstrap::database::get_db;
 use rufu_common::errors::AppError;
 use rufu_common::utils::rand_utils;
@@ -26,6 +27,8 @@ pub async fn add_admin_user(req: AdminRegisterRequest) -> Result<AdminUsersVo, A
         sex: req.sex,
         email: req.email.clone(),
         phone: req.phone.clone(),
+        created_at: DateTime::now().format("YYYY-MM-DD hh:mm:ss"),
+        updated_at: DateTime::now().format("YYYY-MM-DD hh:mm:ss"),
     };
 
     AdminUsers::insert(db, &admin_user).await?;

@@ -9,6 +9,8 @@ pub struct AdminUsersVo {
     pub sex: String,
     pub email: String,
     pub phone: String,
+    pub created_at: String,
+    pub updated_at: String,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

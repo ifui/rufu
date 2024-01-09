@@ -37,3 +37,5 @@ tower = { version = "0.4.13", features = ["timeout"] }
 async-trait = "0.1.75"
 # JWT
 jsonwebtoken = "9.2.0"
+# 正则工具
+regex = { version = "1.10.2", features = [] }

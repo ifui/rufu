@@ -11,6 +11,8 @@ pub struct AdminUsers {
     pub sex: String,
     pub email: String,
     pub phone: String,
+    pub created_at: String,
+    pub updated_at: String,
 }
 
 crud!(AdminUsers {});

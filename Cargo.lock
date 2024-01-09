@@ -1592,6 +1592,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "rufu_article"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "rbatis",
+ "rbs",
+ "rufu_common",
+ "serde",
+ "serde_json",
+ "validator",
+]
+
+[[package]]
 name = "rufu_auth"
 version = "0.1.0"
 dependencies = [
@@ -1625,6 +1638,7 @@ dependencies = [
  "rbatis",
  "rbdc-mysql",
  "rbs",
+ "regex",
  "serde",
  "serde_json",
  "thiserror",
@@ -1647,6 +1661,7 @@ dependencies = [
  "rbatis",
  "rbdc-mysql",
  "rbs",
+ "rufu_article",
  "rufu_auth",
  "rufu_common",
  "serde",
