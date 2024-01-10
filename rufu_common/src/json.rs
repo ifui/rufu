@@ -2,7 +2,7 @@ use crate::response::AppResponse;
 use axum::extract::rejection::JsonRejection;
 use axum::extract::{FromRequest, Request};
 use axum::http::StatusCode;
-use axum::{async_trait, Json, RequestPartsExt};
+use axum::{async_trait, Json};
 use serde::Serialize;
 use serde_json::{json, Value};
 use validator::{Validate, ValidationErrors};

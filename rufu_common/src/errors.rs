@@ -84,3 +84,9 @@ impl From<jsonwebtoken::errors::Error> for AppError {
         }
     }
 }
+
+impl From<serde_urlencoded::de::Error> for AppError {
+    fn from(arg: serde_urlencoded::de::Error) -> Self {
+        AppError::VALIDATE_FIELD_ERROR(arg.to_string())
+    }
+}

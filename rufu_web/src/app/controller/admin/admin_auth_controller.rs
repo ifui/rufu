@@ -12,7 +12,9 @@ use rufu_common::response::{AppResponse, AppResult};
 
 /// 用户登录
 #[axum::debug_handler]
-pub async fn admin_login(req: RufuJson<AdminSignRequest>) -> AppResult<AdminUserWithTokenVo> {
+pub async fn admin_login_controller(
+    req: RufuJson<AdminSignRequest>,
+) -> AppResult<AdminUserWithTokenVo> {
     let res = login_with_username(req.validate()?).await?;
 
     // 生成 token
@@ -41,7 +43,9 @@ pub async fn admin_login(req: RufuJson<AdminSignRequest>) -> AppResult<AdminUser
 
 /// 后台用户注册
 #[axum::debug_handler]
-pub async fn admin_register(userinfo: RufuJson<AdminRegisterRequest>) -> AppResult<AdminUsersVo> {
+pub async fn admin_register_controller(
+    userinfo: RufuJson<AdminRegisterRequest>,
+) -> AppResult<AdminUsersVo> {
     let res = add_admin_user(userinfo.validate()?).await?;
 
     Ok(AppResponse::result(res))
@@ -49,6 +53,8 @@ pub async fn admin_register(userinfo: RufuJson<AdminRegisterRequest>) -> AppResu
 
 /// 登录用户信息
 #[axum::debug_handler]
-pub async fn admin_userinfo(Extension(admin_user): Extension<AdminUsers>) -> AppResult<AdminUsers> {
+pub async fn admin_userinfo_controller(
+    Extension(admin_user): Extension<AdminUsers>,
+) -> AppResult<AdminUsers> {
     Ok(AppResponse::result(admin_user))
 }

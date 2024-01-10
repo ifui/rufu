@@ -10,6 +10,14 @@ pub struct AppResponse<T: Serialize> {
     pub data: Option<T>,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PageData<T> {
+    pub total: u64,
+    pub page: u64,
+    pub page_size: u64,
+    pub records: Option<T>,
+}
+
 impl<T: Serialize> AppResponse<T> {
     pub fn new(code: i32, msg: String, data: Option<T>) -> Json<Self> {
         Json(Self { code, msg, data })
@@ -28,4 +36,4 @@ impl<T: Serialize> AppResponse<T> {
     }
 }
 
-pub type AppResult<T = i8> = Result<Json<AppResponse<T>>, AppError>;
+pub type AppResult<T = usize> = Result<Json<AppResponse<T>>, AppError>;

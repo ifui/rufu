@@ -10,6 +10,8 @@ axum = "0.7.2"
 tokio =  { version = "1", features = ["full"] }
 serde = { version = "1.0.193", features = ["derive"] }
 serde_json = "1.0.108"
+# 解析Url参数
+serde_urlencoded = "0.7.1"
 # 字段验证
 validator = { version = "0.16.1", features = ["derive"] }
 # 惰性初始化静态数据
