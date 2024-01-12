@@ -7,11 +7,11 @@ use rufu_article::service::article_category_service::{
 };
 use rufu_article::vo::article_category_vo::ArticleCategoryVo;
 use rufu_common::json::RufuJson;
-use rufu_common::request::batch_delete_request::BatchDeleteRequest;
 use rufu_common::response::{AppResponse, AppResult};
 
 /// 添加文章类别
 #[axum::debug_handler]
+#[utoipa::path(post, path = "/admin/article/category", tag = "rufu_article")]
 pub async fn article_category_add_controller(
     req: RufuJson<ArticleCategoryRequest>,
 ) -> AppResult<ArticleCategory> {
@@ -21,6 +21,7 @@ pub async fn article_category_add_controller(
 
 /// 浏览文章类别列表
 #[axum::debug_handler]
+#[utoipa::path(get, path = "/admin/article/category", tag = "rufu_article")]
 pub async fn article_category_list_controller() -> AppResult<Vec<ArticleCategoryVo>> {
     let res = article_category_list_service().await?;
     Ok(AppResponse::result(res))
@@ -28,6 +29,7 @@ pub async fn article_category_list_controller() -> AppResult<Vec<ArticleCategory
 
 /// 更新文章类别
 #[axum::debug_handler]
+#[utoipa::path(put, path = "/admin/article/category", tag = "rufu_article")]
 pub async fn article_category_update_controller(
     id: Path<u32>,
     req: RufuJson<ArticleCategoryRequest>,
@@ -38,9 +40,8 @@ pub async fn article_category_update_controller(
 
 /// 删除文章类别
 #[axum::debug_handler]
-pub async fn article_category_delete_controller(
-    req: RufuJson<BatchDeleteRequest>,
-) -> AppResult<ArticleCategory> {
-    article_category_delete_service(req.validate()?).await?;
+#[utoipa::path(delete, path = "/admin/article/category/:id", tag = "rufu_article")]
+pub async fn article_category_delete_controller(id: Path<u32>) -> AppResult<ArticleCategory> {
+    article_category_delete_service(id.0).await?;
     Ok(AppResponse::ok())
 }

@@ -16,7 +16,7 @@ pub async fn connect_db() {
         // 初始化数据库
         init_db(&rb).await;
 
-        return rb;
+        rb
     })
     .await;
 }

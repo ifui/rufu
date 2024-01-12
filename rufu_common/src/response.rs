@@ -1,16 +1,17 @@
 use crate::errors::AppError;
 use axum::Json;
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 
 /// 响应模板
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct AppResponse<T: Serialize> {
     pub code: i32,
     pub msg: String,
     pub data: Option<T>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct PageData<T> {
     pub total: u64,
     pub page: u64,

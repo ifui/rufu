@@ -90,3 +90,9 @@ impl From<serde_urlencoded::de::Error> for AppError {
         AppError::VALIDATE_FIELD_ERROR(arg.to_string())
     }
 }
+
+impl From<sqids::Error> for AppError {
+    fn from(arg: sqids::Error) -> Self {
+        AppError::SERVER_ERROR(arg.to_string())
+    }
+}

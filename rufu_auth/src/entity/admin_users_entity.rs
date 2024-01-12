@@ -3,16 +3,17 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct AdminUsers {
-    pub id: String,
-    pub username: String,
-    pub nickname: String,
-    pub password: String,
-    pub avatar: String,
-    pub sex: String,
-    pub email: String,
-    pub phone: String,
-    pub created_at: String,
-    pub updated_at: String,
+    pub id: Option<String>,
+    pub username: Option<String>,
+    pub nickname: Option<String>,
+    pub password: Option<String>,
+    pub avatar: Option<String>,
+    pub sex: Option<String>,
+    pub email: Option<String>,
+    pub phone: Option<String>,
+    pub status: Option<String>,
+    pub created_at: Option<String>,
+    pub updated_at: Option<String>,
 }
 
 crud!(AdminUsers {});

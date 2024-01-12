@@ -8,7 +8,6 @@ use rbatis::rbdc::DateTime;
 use rbatis::PageRequest;
 use rufu_common::bootstrap::database::get_db;
 use rufu_common::errors::AppError;
-use rufu_common::request::batch_delete_request::BatchDeleteRequest;
 use rufu_common::request::paginate_request::PaginateRequest;
 use rufu_common::response::PageData;
 use serde_json::{from_value, json};
@@ -134,17 +133,12 @@ pub async fn article_list_service(
 }
 
 /// 删除文章
-pub async fn article_delete_service(req: BatchDeleteRequest) -> Result<(), AppError> {
+pub async fn article_delete_service(id: u32) -> Result<(), AppError> {
     let db = get_db()?;
 
-    match req.ids {
-        None => {}
-        Some(s) => {
-            Article::delete_in_column(db, "id", &s).await?;
-            // 删除附表
-            ArticleData::delete_in_column(db, "article_id", &s).await?;
-        }
-    }
+    Article::delete_by_column(db, "id", &id).await?;
+    // 删除附表
+    ArticleData::delete_by_column(db, "article_id", &id).await?;
 
     Ok(())
 }

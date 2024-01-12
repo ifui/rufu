@@ -18,7 +18,17 @@ pub async fn hash_password(password: String) -> anyhow::Result<String> {
 }
 
 /// 验证密码
-pub async fn verify_password(password: String, password_hash: String) -> Result<(), AppError> {
+pub async fn verify_password(
+    password: Option<String>,
+    password_hash: Option<String>,
+) -> Result<(), AppError> {
+    if password.is_none() || password_hash.is_none() {
+        return Err(AppError::VALIDATE_FIELD_ERROR("密码不正确".to_string()));
+    }
+
+    let password = password.unwrap();
+    let password_hash = password_hash.unwrap();
+
     tokio::task::spawn_blocking(move || -> Result<(), AppError> {
         let hash = PasswordHash::new(&password_hash)
             .map_err(|_| AppError::VALIDATE_FIELD_ERROR("密码读取失败".to_string()))?;

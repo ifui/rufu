@@ -10,8 +10,9 @@ use rufu_common::bootstrap::application::APP_CONFIG;
 use rufu_common::json::RufuJson;
 use rufu_common::response::{AppResponse, AppResult};
 
-/// 用户登录
+/// 后台用户登录
 #[axum::debug_handler]
+#[utoipa::path(post, path = "/admin/article", tag = "rufu_auth")]
 pub async fn admin_login_controller(
     req: RufuJson<AdminSignRequest>,
 ) -> AppResult<AdminUserWithTokenVo> {
@@ -22,8 +23,8 @@ pub async fn admin_login_controller(
     let jwt_secret = APP_CONFIG.jwt_secret.as_ref();
     let exp = (chrono::Utc::now() + chrono::Duration::minutes(jwt_expire)).timestamp();
     let claims: JwtClaims = JwtClaims {
-        username: res.username.clone(),
-        user_id: res.id.clone(),
+        username: res.username.clone().unwrap(),
+        user_id: res.id.clone().unwrap(),
         exp,
     };
     let token = encode(
@@ -33,9 +34,9 @@ pub async fn admin_login_controller(
     )?;
 
     let response = AdminUserWithTokenVo {
-        token,
-        userinfo: res,
-        expire: exp,
+        token: Some(token),
+        userinfo: Some(res),
+        expire: Some(exp),
     };
 
     Ok(AppResponse::result(response))
@@ -43,6 +44,7 @@ pub async fn admin_login_controller(
 
 /// 后台用户注册
 #[axum::debug_handler]
+#[utoipa::path(post, path = "/admin/register", tag = "rufu_auth")]
 pub async fn admin_register_controller(
     userinfo: RufuJson<AdminRegisterRequest>,
 ) -> AppResult<AdminUsersVo> {
@@ -53,6 +55,7 @@ pub async fn admin_register_controller(
 
 /// 登录用户信息
 #[axum::debug_handler]
+#[utoipa::path(get, path = "/admin/userinfo", tag = "rufu_auth")]
 pub async fn admin_userinfo_controller(
     Extension(admin_user): Extension<AdminUsers>,
 ) -> AppResult<AdminUsers> {

@@ -6,7 +6,6 @@ use rufu_common::bootstrap::database::get_db;
 use rufu_common::errors::AppError;
 use rufu_common::utils::rand_utils;
 use serde_json::{from_value, json};
-use uuid::Uuid;
 
 // 后台用户注册
 pub async fn add_admin_user(req: AdminRegisterRequest) -> Result<AdminUsersVo, AppError> {
@@ -17,18 +16,23 @@ pub async fn add_admin_user(req: AdminRegisterRequest) -> Result<AdminUsersVo, A
         return Err(AppError::VALIDATE_FIELD_ERROR("用户名已存在".to_string()));
     }
 
+    let sqids = sqids::Sqids::builder().min_length(10).build()?;
+
     let admin_user = AdminUsers {
-        id: Uuid::new_v4().to_string(),
+        id: Some(sqids.encode(&[5, 2, 1])?),
         username: req.username,
         nickname: req.nickname,
         // 生成加密密码
-        password: rand_utils::hash_password(req.password).await?,
+        password: Some(
+            rand_utils::hash_password(req.password.unwrap_or("123456".to_string())).await?,
+        ),
         avatar: req.avatar,
         sex: req.sex,
         email: req.email.clone(),
         phone: req.phone.clone(),
-        created_at: DateTime::now().format("YYYY-MM-DD hh:mm:ss"),
-        updated_at: DateTime::now().format("YYYY-MM-DD hh:mm:ss"),
+        status: Some("9".to_string()),
+        created_at: Some(DateTime::now().format("YYYY-MM-DD hh:mm:ss")),
+        updated_at: Some(DateTime::now().format("YYYY-MM-DD hh:mm:ss")),
     };
 
     AdminUsers::insert(db, &admin_user).await?;

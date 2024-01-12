@@ -3,7 +3,6 @@ use crate::request::article_category_request::ArticleCategoryRequest;
 use crate::vo::article_category_vo::ArticleCategoryVo;
 use rufu_common::bootstrap::database::get_db;
 use rufu_common::errors::AppError;
-use rufu_common::request::batch_delete_request::BatchDeleteRequest;
 
 /// 添加文章类别
 pub async fn article_category_add_service(
@@ -75,15 +74,10 @@ pub async fn article_category_update_service(
 }
 
 /// 删除文章类别
-pub async fn article_category_delete_service(req: BatchDeleteRequest) -> Result<(), AppError> {
+pub async fn article_category_delete_service(id: u32) -> Result<(), AppError> {
     let db = get_db()?;
 
-    match req.ids {
-        None => {}
-        Some(s) => {
-            ArticleCategory::delete_in_column(db, "id", &s).await?;
-        }
-    }
+    ArticleCategory::delete_by_column(db, "id", id).await?;
 
     Ok(())
 }

@@ -19,6 +19,8 @@ pub async fn login_with_username(req: AdminSignRequest) -> Result<AdminUsersVo, 
     // 校验密码
     verify_password(req.password, admin_user.clone().password).await?;
 
+    println!("{:?}", admin_user);
+
     let admin_users_vo: AdminUsersVo = from_value(json!(admin_user))?;
 
     Ok(admin_users_vo)

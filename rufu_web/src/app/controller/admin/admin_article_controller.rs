@@ -10,21 +10,22 @@ use rufu_article::vo::article_vo::ArticleVo;
 use rufu_auth::entity::admin_users_entity::AdminUsers;
 use rufu_common::json::RufuJson;
 use rufu_common::query::RufuQuery;
-use rufu_common::request::batch_delete_request::BatchDeleteRequest;
 use rufu_common::request::paginate_request::PaginateRequest;
 use rufu_common::response::{AppResponse, AppResult, PageData};
 
 /// 添加文章
+#[utoipa::path(post, path = "/admin/article", tag = "rufu_article")]
 #[axum::debug_handler]
 pub async fn article_add_controller(
     Extension(admin_user): Extension<AdminUsers>,
     req: RufuJson<ArticleRequest>,
 ) -> AppResult<()> {
-    article_add_service(req.validate()?, Some(admin_user.username)).await?;
+    article_add_service(req.validate()?, admin_user.username).await?;
     Ok(AppResponse::ok())
 }
 
 /// 更新文章
+#[utoipa::path(put, path = "/admin/article", tag = "rufu_article")]
 #[axum::debug_handler]
 pub async fn article_update_controller(
     id: Path<u32>,
@@ -35,6 +36,7 @@ pub async fn article_update_controller(
 }
 
 /// 文章列表
+#[utoipa::path(get, path = "/admin/article", tag = "rufu_article")]
 #[axum::debug_handler]
 pub async fn article_list_controller(
     Extension(paginate): Extension<PaginateRequest>,
@@ -45,6 +47,7 @@ pub async fn article_list_controller(
 }
 
 /// 文章详情
+#[utoipa::path(get, path = "/admin/article/:id", tag = "rufu_article")]
 #[axum::debug_handler]
 pub async fn article_show_controller(id: Path<u32>) -> AppResult<ArticleVo> {
     let res = article_show_service(Some(id.0)).await?;
@@ -52,8 +55,9 @@ pub async fn article_show_controller(id: Path<u32>) -> AppResult<ArticleVo> {
 }
 
 /// 删除文章
+#[utoipa::path(delete, path = "/admin/article/:id", tag = "rufu_article")]
 #[axum::debug_handler]
-pub async fn article_delete_controller(req: RufuJson<BatchDeleteRequest>) -> AppResult<()> {
-    article_delete_service(req.validate()?).await?;
+pub async fn article_delete_controller(id: Path<u32>) -> AppResult<()> {
+    article_delete_service(id.0).await?;
     Ok(AppResponse::ok())
 }

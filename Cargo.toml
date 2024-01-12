@@ -5,7 +5,8 @@ members = [
     "rufu_common",
     "rufu_auth",
     "rufu_web",
-    "rufu_article"
+    "rufu_article",
+    "rufu_permission"
 ]
 default-members = ["rufu_web"]
 
