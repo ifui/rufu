@@ -1,6 +1,11 @@
 mod app;
+mod entity;
+mod middleware;
 mod openapi;
+mod request;
 mod router;
+mod service;
+mod traits;
 
 use crate::router::get_router;
 use rufu_common::bootstrap;

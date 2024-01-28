@@ -23,7 +23,7 @@ config = "0.13.4"
 dotenv_rs = "0.16.1"
 # ORM rbatis deps
 rbs = { version = "4.5" }
-rbatis = { version = "4.5", features = ["debug_mode"] }
+rbatis = { version = "4.5" }
 rbdc-mysql = { version = "4.5" }
 # 错误报告
 anyhow = "1.0.77"

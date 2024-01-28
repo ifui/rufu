@@ -1,9 +1,9 @@
 use axum::Extension;
 use jsonwebtoken::{encode, EncodingKey, Header};
-use rufu_auth::entity::admin_users_entity::AdminUsers;
+use rufu_auth::interface::UserExt;
 use rufu_auth::middleware::JwtClaims;
 use rufu_auth::request::admin_auth_request::{AdminRegisterRequest, AdminSignRequest};
-use rufu_auth::service::admin_users_service::add_admin_user;
+use rufu_auth::service::admin_users_service::{add_admin_user, get_admin_user};
 use rufu_auth::service::auth_service::login_with_username;
 use rufu_auth::vo::admin_users_vo::{AdminUserWithTokenVo, AdminUsersVo};
 use rufu_common::bootstrap::application::APP_CONFIG;
@@ -12,7 +12,7 @@ use rufu_common::response::{AppResponse, AppResult};
 
 /// 后台用户登录
 #[axum::debug_handler]
-#[utoipa::path(post, path = "/admin/article", tag = "rufu_auth")]
+#[utoipa::path(post, path = "/admin/login", tag = "rufu_auth")]
 pub async fn admin_login_controller(
     req: RufuJson<AdminSignRequest>,
 ) -> AppResult<AdminUserWithTokenVo> {
@@ -23,6 +23,7 @@ pub async fn admin_login_controller(
     let jwt_secret = APP_CONFIG.jwt_secret.as_ref();
     let exp = (chrono::Utc::now() + chrono::Duration::minutes(jwt_expire)).timestamp();
     let claims: JwtClaims = JwtClaims {
+        domain: "ADMIN".to_string(),
         username: res.username.clone().unwrap(),
         user_id: res.id.clone().unwrap(),
         exp,
@@ -57,7 +58,8 @@ pub async fn admin_register_controller(
 #[axum::debug_handler]
 #[utoipa::path(get, path = "/admin/userinfo", tag = "rufu_auth")]
 pub async fn admin_userinfo_controller(
-    Extension(admin_user): Extension<AdminUsers>,
-) -> AppResult<AdminUsers> {
+    Extension(user_ext): Extension<UserExt>,
+) -> AppResult<AdminUsersVo> {
+    let admin_user = get_admin_user(Some(user_ext.get_user_id())).await?;
     Ok(AppResponse::result(admin_user))
 }

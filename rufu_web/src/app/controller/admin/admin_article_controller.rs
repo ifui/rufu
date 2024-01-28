@@ -7,7 +7,7 @@ use rufu_article::service::article_service::{
     article_update_service,
 };
 use rufu_article::vo::article_vo::ArticleVo;
-use rufu_auth::entity::admin_users_entity::AdminUsers;
+use rufu_auth::entity::admin_user_entity::AdminUser;
 use rufu_common::json::RufuJson;
 use rufu_common::query::RufuQuery;
 use rufu_common::request::paginate_request::PaginateRequest;
@@ -17,7 +17,7 @@ use rufu_common::response::{AppResponse, AppResult, PageData};
 #[utoipa::path(post, path = "/admin/article", tag = "rufu_article")]
 #[axum::debug_handler]
 pub async fn article_add_controller(
-    Extension(admin_user): Extension<AdminUsers>,
+    Extension(admin_user): Extension<AdminUser>,
     req: RufuJson<ArticleRequest>,
 ) -> AppResult<()> {
     article_add_service(req.validate()?, admin_user.username).await?;
@@ -25,7 +25,7 @@ pub async fn article_add_controller(
 }
 
 /// 更新文章
-#[utoipa::path(put, path = "/admin/article", tag = "rufu_article")]
+#[utoipa::path(put, path = "/admin/article/:id", tag = "rufu_article")]
 #[axum::debug_handler]
 pub async fn article_update_controller(
     id: Path<u32>,

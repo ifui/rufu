@@ -9,7 +9,15 @@ pub async fn paginate_request_middleware(
     next: Next,
 ) -> Result<Response, AppError> {
     match request.uri().query() {
-        None => {}
+        None => {
+            // 默认页码设置
+            let query: PaginateRequest = PaginateRequest {
+                page: 1,
+                page_size: 15,
+            };
+
+            request.extensions_mut().insert(query.to_owned());
+        }
         Some(q) => {
             let query: PaginateRequest = serde_urlencoded::from_str(q)?;
             request.extensions_mut().insert(query.to_owned());

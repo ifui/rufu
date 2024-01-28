@@ -17,6 +17,10 @@ pub enum AppError {
     VALIDATE_FIELD_ERROR(String),
     // JSON序列化错误
     JSON_SERIALIZE,
+    // 页面不存在
+    PAGE_NOT_FOUND,
+    // 资源不存在
+    RESOURCE_NOT_FOUND(String),
     // JWT错误
     JWT_ERROR(String),
     // 无权限访问
@@ -33,6 +37,8 @@ impl AppError {
             AppError::JSON_SERIALIZE => (405, "JSON序列化错误".to_string(), None),
             AppError::JWT_ERROR(e) => (406, e.to_string(), None),
             AppError::UNAUTHORIZED => (401, "对不起，您没有权限访问".to_string(), None),
+            AppError::PAGE_NOT_FOUND => (404, "对不起，该页面不存在".to_string(), None),
+            AppError::RESOURCE_NOT_FOUND(e) => (404, e.to_string(), None),
         }
     }
 }

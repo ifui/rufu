@@ -7,7 +7,7 @@ fn validate_status(value: &str) -> Result<(), ValidationError> {
         return Ok(());
     }
 
-    Err(ValidationError::new("状态参数只允许0、9"))
+    Err(ValidationError::new("状态参数只允许0|-1|9"))
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default, Validate)]

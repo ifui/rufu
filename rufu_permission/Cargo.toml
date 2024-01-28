@@ -9,5 +9,13 @@ authors = [
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+axum = "0.7"
 serde = { version = "1.0.193", features = ["derive"] }
+# ORM
+rbs = { version = "4.5" }
 rbatis = "4.5"
+# 字段验证
+validator = { version = "0.16.1", features = ["derive"] }
+# openapi
+utoipa = { version = "4.1.0", features = ["axum_extras", "debug"] }
+rufu_common = { path = "../rufu_common" }

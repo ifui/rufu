@@ -9,4 +9,3 @@ members = [
     "rufu_permission"
 ]
 default-members = ["rufu_web"]
-

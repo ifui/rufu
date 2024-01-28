@@ -2,7 +2,7 @@ use rbatis::crud;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct AdminUsers {
+pub struct AdminUser {
     pub id: Option<String>,
     pub username: Option<String>,
     pub nickname: Option<String>,
@@ -16,4 +16,4 @@ pub struct AdminUsers {
     pub updated_at: Option<String>,
 }
 
-crud!(AdminUsers {});
+crud!(AdminUser {});

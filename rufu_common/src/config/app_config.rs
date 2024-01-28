@@ -13,4 +13,11 @@ pub struct AppConfig {
     // JWT
     pub jwt_secret: String,
     pub jwt_expire: i64,
+    // swagger ui
+    pub swagger_url: String,
+    pub openapi_url: String,
+    // 超级管理员用户ID，多个请用英文,号分隔
+    pub super_admin_id: String,
+    // 角色域，多个请用英文,号分隔
+    pub role_domain: String,
 }

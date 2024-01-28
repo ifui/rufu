@@ -41,3 +41,4 @@ utoipa-swagger-ui = { version = "5.0.0", features = ["axum"] }
 rufu_common = { path = "../rufu_common" }
 rufu_auth = { path = "../rufu_auth" }
 rufu_article = { path = "../rufu_article" }
+rufu_permission = { path = "../rufu_permission" }

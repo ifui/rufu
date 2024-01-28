@@ -1,19 +1,18 @@
-use crate::entity::admin_users_entity::AdminUsers;
+use crate::interface::UserExt;
 use axum::extract::Request;
 use axum::http::{header, HeaderMap};
 use axum::middleware::Next;
-use axum::response::{IntoResponse, Response};
+use axum::response::Response;
 use jsonwebtoken::{decode, DecodingKey, Validation};
 use rufu_common::bootstrap::application::APP_CONFIG;
-use rufu_common::bootstrap::database::get_db;
 use rufu_common::errors::AppError;
-use rufu_common::response::AppResponse;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct JwtClaims {
     pub username: String,
     pub user_id: String,
+    pub domain: String,
     pub exp: i64,
 }
 
@@ -34,6 +33,7 @@ pub async fn jwt_middleware(
             }
         });
     let token = token.ok_or_else(|| AppError::UNAUTHORIZED)?;
+    println!("{:?}", token);
 
     let claims = decode::<JwtClaims>(
         &token,
@@ -41,18 +41,11 @@ pub async fn jwt_middleware(
         &Validation::default(),
     )?
     .claims;
-    let db = get_db()?;
-    let user = AdminUsers::select_by_column(db, "id", &claims.user_id).await?;
 
-    if user.is_empty() {
-        return Ok(
-            AppResponse::<usize>::error(401, "对不起，该用户没有权限访问".to_string())
-                .into_response(),
-        );
-    }
-    let user = user.first().ok_or(AppError::UNAUTHORIZED)?;
+    let user_ext = UserExt::new(claims.clone().user_id, claims.clone().domain);
 
-    request.extensions_mut().insert(user.to_owned());
+    request.extensions_mut().insert(claims);
+    request.extensions_mut().insert(user_ext);
     let response = next.run(request).await;
     Ok(response)
 }

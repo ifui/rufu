@@ -1563,7 +1563,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "rbatis-codegen",
- "rust-format",
  "syn 2.0.44",
 ]
 
@@ -1805,8 +1804,13 @@ dependencies = [
 name = "rufu_permission"
 version = "0.1.0"
 dependencies = [
+ "axum",
  "rbatis",
+ "rbs",
+ "rufu_common",
  "serde",
+ "utoipa",
+ "validator",
 ]
 
 [[package]]
@@ -1826,6 +1830,7 @@ dependencies = [
  "rufu_article",
  "rufu_auth",
  "rufu_common",
+ "rufu_permission",
  "serde",
  "serde_json",
  "tokio",
@@ -1869,12 +1874,6 @@ dependencies = [
  "sha2",
  "walkdir",
 ]
-
-[[package]]
-name = "rust-format"
-version = "0.3.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "60e7c00b6c3bf5e38a880eec01d7e829d12ca682079f8238a464def3c4b31627"
 
 [[package]]
 name = "rust-ini"

@@ -1,4 +1,4 @@
-use crate::entity::admin_users_entity::AdminUsers;
+use crate::entity::admin_user_entity::AdminUser;
 use crate::request::admin_auth_request::AdminSignRequest;
 use crate::vo::admin_users_vo::AdminUsersVo;
 use rufu_common::bootstrap::database::get_db;
@@ -10,7 +10,7 @@ use serde_json::{from_value, json};
 pub async fn login_with_username(req: AdminSignRequest) -> Result<AdminUsersVo, AppError> {
     let db = get_db()?;
 
-    let admin_user_vec = AdminUsers::select_by_column(db, "username", &req.username).await?;
+    let admin_user_vec = AdminUser::select_by_column(db, "username", &req.username).await?;
 
     let admin_user = admin_user_vec
         .first()
