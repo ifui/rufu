@@ -23,5 +23,14 @@ impl_select!(RolePermission {
 });
 
 impl_delete!(RolePermission {
-    deleteby_by_all_column(role_id: Option<u32>, permission_id: Option<u32>) => "`where role_id = #{role_id} and permission_id = #{permission_id}`"
+    delete_by_all_column(role_id: Option<u32>, permission_id: Option<u32>) => "`where role_id = #{role_id} and permission_id = #{permission_id}`"
+});
+
+impl_delete!(RolePermission {
+    delete_by_permission_ids_column(role_id: Option<u32>, permission_ids: Option<Vec<u32>>) =>
+    "`where role_id = #{role_id} and permission_id in (`
+    trim ',': for _,item in permission_ids:
+        #{item},
+    `)`
+    "
 });

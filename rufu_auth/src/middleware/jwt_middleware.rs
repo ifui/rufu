@@ -33,7 +33,6 @@ pub async fn jwt_middleware(
             }
         });
     let token = token.ok_or_else(|| AppError::UNAUTHORIZED)?;
-    println!("{:?}", token);
 
     let claims = decode::<JwtClaims>(
         &token,

@@ -10,13 +10,14 @@ use crate::app::controller::admin::admin_auth_controller::{
     admin_login_controller, admin_register_controller, admin_userinfo_controller,
 };
 use crate::app::controller::admin::admin_permission_controller::{
-    admin_permission_add_controller, admin_permission_assign_by_role_controller,
-    admin_permission_delete_by_role_controller, admin_permission_delete_controller,
-    admin_permission_list_controller, admin_permission_refresh_controller,
+    admin_permission_add_controller, admin_permission_all_controller,
+    admin_permission_assign_by_role_controller, admin_permission_delete_by_role_controller,
+    admin_permission_delete_controller, admin_permission_list_controller,
+    admin_permission_refresh_controller, admin_permission_update_controller,
 };
 use crate::app::controller::admin::admin_role_controller::{
     admin_role_add_controller, admin_role_delete_controller, admin_role_list_controller,
-    admin_role_update_controller,
+    admin_role_show_controller, admin_role_update_controller,
 };
 use crate::app::controller::admin::admin_user_role_controller::{
     user_role_add_controller, user_role_delete_controller,
@@ -58,16 +59,20 @@ pub fn auth_routes() -> Router {
         // 角色管理
         .route(
             "/admin/role",
-            post(admin_role_add_controller).get(admin_role_list_controller),
+            post(admin_role_add_controller)
+                .get(admin_role_list_controller)
+                .put(admin_role_update_controller),
         )
         .route(
             "/admin/role/:id",
-            put(admin_role_update_controller).delete(admin_role_delete_controller),
+            delete(admin_role_delete_controller).get(admin_role_show_controller),
         )
         // 权限管理
         .route(
             "/admin/permission",
-            post(admin_permission_add_controller).get(admin_permission_list_controller),
+            post(admin_permission_add_controller)
+                .get(admin_permission_list_controller)
+                .put(admin_permission_update_controller),
         )
         .route(
             "/admin/permission/:id",
@@ -77,6 +82,10 @@ pub fn auth_routes() -> Router {
         .route(
             "/admin/permission/refresh",
             post(admin_permission_refresh_controller),
+        )
+        .route(
+            "/admin/permission/all",
+            get(admin_permission_all_controller),
         )
         .route(
             "/admin/role_permission",

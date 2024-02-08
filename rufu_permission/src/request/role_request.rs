@@ -4,6 +4,7 @@ use validator::Validate;
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default, Validate)]
 pub struct RoleRequest {
+    pub role_id: Option<u32>,
     #[validate(length(min = 1, message = "长度最少1个字符"))]
     #[validate(required(message = "该项必填"))]
     pub role_name: Option<String>,
@@ -12,7 +13,7 @@ pub struct RoleRequest {
     pub role_key: Option<String>,
     pub sort: Option<u32>,
     pub remark: Option<String>,
-    pub is_default: Option<bool>,
+    pub is_default: Option<String>,
     #[validate(custom = "validate_domain")]
     pub domain: Option<String>,
 }

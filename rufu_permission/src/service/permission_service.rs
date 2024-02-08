@@ -1,5 +1,4 @@
 use crate::entity::permission_entity::Permission;
-use crate::entity::role_entity::Role;
 use crate::entity::role_permission_entity::RolePermission;
 use crate::request::permission_request::{PermissionQueryRequest, PermissionRequest};
 use rbatis::PageRequest;
@@ -9,6 +8,7 @@ use rufu_common::request::paginate_request::PaginateRequest;
 use rufu_common::response::PageData;
 use rufu_common::utils::date_utils::get_now_date;
 use utoipa::openapi::{OpenApi, PathItemType};
+use validator::HasLen;
 
 /// 基于 OpenApi 更新权限表
 pub async fn permission_refresh_by_openapi_service(openapi: OpenApi) -> Result<(), AppError> {
@@ -61,6 +61,39 @@ pub async fn permission_refresh_by_openapi_service(openapi: OpenApi) -> Result<(
             }
         };
     }
+
+    Ok(())
+}
+
+// 更新权限
+pub async fn permission_update_service(req: PermissionRequest) -> Result<(), AppError> {
+    let db = get_db()?;
+
+    let method = req.clone().method.unwrap().to_lowercase();
+
+    // 判断是否有重复的权限
+    let permissions =
+        Permission::select_path_method_column(db, req.clone().path, Some(method.clone())).await?;
+    match permissions.first() {
+        None => {}
+        Some(permission) => {
+            if permission.permission_id != req.permission_id {
+                return Err(AppError::VALIDATE_FIELD_ERROR("该权限已存在".to_string()));
+            }
+        }
+    }
+
+    let permission = Permission {
+        permission_id: req.permission_id,
+        path: req.path,
+        summary: req.summary,
+        description: req.description,
+        tags: req.tags,
+        method: Some(method),
+        created_at: Some(get_now_date()),
+        updated_at: Some(get_now_date()),
+    };
+    Permission::update_by_column(db, &permission, "permission_id").await?;
 
     Ok(())
 }
@@ -129,39 +162,34 @@ pub async fn permission_delete_service(permission_id: Option<u32>) -> Result<(),
 
     Permission::delete_by_column(db, "permission_id", permission_id).await?;
 
+    // 删除权限时，一并删除 RolePermission 表数据
+    RolePermission::delete_by_column(db, "permission_id", permission_id).await?;
+
     Ok(())
 }
 
-// 给角色分配权限
+// 给角色分配权限，先清空后添加
 pub async fn permission_assign_by_role_id_service(
     role_id: Option<u32>,
-    permission_id: Option<u32>,
+    permission_ids: Option<Vec<u32>>,
 ) -> Result<(), AppError> {
     let db = get_db()?;
 
-    let exist_role_permission =
-        RolePermission::select_role_id_permission_id(db, role_id, permission_id).await?;
+    if permission_ids.is_some() && !permission_ids.clone().unwrap().is_empty() {
+        // 清空原有权限
+        RolePermission::delete_by_permission_ids_column(db, role_id, permission_ids.clone())
+            .await?;
 
-    match exist_role_permission.first() {
-        None => {
-            let role_permission = RolePermission {
+        let mut table: Vec<RolePermission> = vec![];
+        for permission_id in permission_ids.unwrap() {
+            table.push(RolePermission {
                 role_id,
-                permission_id,
-            };
-
-            let role = Role::select_by_column(db, "role_id", role_id).await?;
-            if role.is_empty() {
-                return Err(AppError::VALIDATE_FIELD_ERROR("角色不存在".to_string()));
-            }
-            let permission =
-                Permission::select_by_column(db, "permission_id", permission_id).await?;
-            if permission.is_empty() {
-                return Err(AppError::VALIDATE_FIELD_ERROR("权限不存在".to_string()));
-            }
-
-            RolePermission::insert(db, &role_permission).await?;
+                permission_id: Some(permission_id),
+            })
         }
-        Some(_) => return Ok(()),
+
+        // 写入权限
+        RolePermission::insert_batch(db, &table, table.length()).await?;
     }
 
     Ok(())
@@ -174,7 +202,7 @@ pub async fn permission_delete_by_role_id_service(
 ) -> Result<(), AppError> {
     let db = get_db()?;
 
-    RolePermission::deleteby_by_all_column(db, Some(role_id), Some(permission_id)).await?;
+    RolePermission::delete_by_all_column(db, Some(role_id), Some(permission_id)).await?;
 
     Ok(())
 }
@@ -192,4 +220,13 @@ pub async fn role_has_permission(role_id: Vec<u32>, permission_id: u32) -> Resul
     }
 
     Ok(())
+}
+
+// 获取权限列表
+pub async fn permission_all_service() -> Result<Vec<Permission>, AppError> {
+    let db = get_db()?;
+
+    let permissions = Permission::select_all(db).await?;
+
+    Ok(permissions)
 }

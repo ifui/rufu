@@ -1,1 +1,1 @@
-pub mod role_api_vo;
+pub mod role_vo;

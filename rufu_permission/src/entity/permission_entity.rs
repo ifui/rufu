@@ -23,9 +23,9 @@ impl_select_page!(
             method: Option<String>,
             summary: Option<String>,
             tags: Option<String>,
-        ) => " ` where 1=1 `
+        ) => " ` where 1=1`
               if permission_id != null:
-                ` and permission_id = #{id}`
+                ` and permission_id = #{permission_id}`
               if path != '':
                 ` and path like #{'%'+path+'%'}`
               if method != '':
@@ -33,7 +33,7 @@ impl_select_page!(
               if summary != '':
                 ` and summary like #{'%'+summary+'%'}`
               if tags != '':
-                ` and summary = #{tags}`
+                ` and tags = #{tags}`
               ` order by tags asc`
        "
 });

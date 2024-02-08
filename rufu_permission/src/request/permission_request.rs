@@ -3,6 +3,7 @@ use validator::Validate;
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default, Validate)]
 pub struct PermissionRequest {
+    pub permission_id: Option<u32>,
     #[validate(required(message = "该项必填"))]
     pub path: Option<String>,
     #[validate(required(message = "该项必填"))]

@@ -37,6 +37,8 @@ chrono = "0.4.31"
 # openapi
 utoipa = { version = "4.1.0", features = ["axum_extras"] }
 utoipa-swagger-ui = { version = "5.0.0", features = ["axum"] }
+# cors
+tower-http = { version = "0.5.0", features = ["cors"] }
 # ---- 模块
 rufu_common = { path = "../rufu_common" }
 rufu_auth = { path = "../rufu_auth" }

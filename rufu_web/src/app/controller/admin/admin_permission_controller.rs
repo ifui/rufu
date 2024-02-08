@@ -9,9 +9,9 @@ use rufu_permission::entity::permission_entity::Permission;
 use rufu_permission::request::permission_request::{PermissionQueryRequest, PermissionRequest};
 use rufu_permission::request::role_permission_request::RolePermissionRequest;
 use rufu_permission::service::permission_service::{
-    permission_add_service, permission_assign_by_role_id_service,
+    permission_add_service, permission_all_service, permission_assign_by_role_id_service,
     permission_delete_by_role_id_service, permission_delete_service, permission_list_service,
-    permission_refresh_by_openapi_service,
+    permission_refresh_by_openapi_service, permission_update_service,
 };
 use utoipa::OpenApi;
 
@@ -32,6 +32,15 @@ pub async fn admin_permission_list_controller(
 #[utoipa::path(post, path = "/admin/permission", tag = "rufu_permission")]
 pub async fn admin_permission_add_controller(req: RufuJson<PermissionRequest>) -> AppResult<()> {
     permission_add_service(req.validate()?).await?;
+
+    Ok(AppResponse::ok())
+}
+
+/// 更新权限
+#[axum::debug_handler]
+#[utoipa::path(put, path = "/admin/permission", tag = "rufu_permission")]
+pub async fn admin_permission_update_controller(req: RufuJson<PermissionRequest>) -> AppResult<()> {
+    permission_update_service(req.validate()?).await?;
 
     Ok(AppResponse::ok())
 }
@@ -82,4 +91,13 @@ pub async fn admin_permission_delete_by_role_controller(
     permission_delete_by_role_id_service(role_id, permission_id).await?;
 
     Ok(AppResponse::ok())
+}
+
+/// 获取所有权限
+#[axum::debug_handler]
+#[utoipa::path(get, path = "/admin/permission/all", tag = "rufu_permission")]
+pub async fn admin_permission_all_controller() -> AppResult<Vec<Permission>> {
+    let res = permission_all_service().await?;
+
+    Ok(AppResponse::result(res))
 }
